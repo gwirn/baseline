@@ -1,6 +1,6 @@
 # bs_line
 
-**b*asic *s*status line*
+*basic status line*
 
 ## Documentation
 

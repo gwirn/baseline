@@ -1,0 +1,32 @@
+================================================================================
+                                                                       *bs_line*
+
+Basic status line without any dependencies.
+
+
+                                                                *bs_line.setup()*
+bs_line.setup({opts})
+    If {opts} is nil:
+        Default colors will be used. >
+    opts.setup()
+<
+    If {opts} is any
+        Specify colors for different areas like
+        `error_color` : LSP error sign
+        `warning_color` : (LSP) warning sign
+        `ok_color` : LSP OK sign
+        `git_color` : Git indicator symbol
+        `filename_color` : file name in path >
+    opt.setup()
+<
+    Fields show :
+        * LSP diagnostics idicator
+        * Git present and current branch
+        * Current mode
+        * File path
+        * File type
+        * Percentage
+        * Rows and column
+
+
+vim:tw=78:ts=8:ft=help:norl:

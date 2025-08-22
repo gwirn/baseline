@@ -69,7 +69,7 @@ _G.get_current_mode = function()
     local current_mode = vim.api.nvim_get_mode().mode
     return string.format(' %s ', modes[current_mode])
 end
-local isgit = function()
+local isgit = function(max_branch_len)
     local modstring = '%:p:h'
     local hasgit = '%#StatusLineWarning# ☢ %*'
     while true do
@@ -85,7 +85,12 @@ local isgit = function()
             end
             local line = f:read("l"):gsub("[\n\r]", " ")
             f:close()
-            hasgit = string.match(line, path_separator .. '(%w+)$')
+            local git_branch = string.match(line, path_separator .. '(%w+)$'):sub(1, max_branch_len)
+            local gb_lower = git_branch:lower()
+            if gb_lower == 'master' or gb_lower == 'main' then
+                git_branch = '%#StatusLineWarning#' .. git_branch .. '%*'
+            end
+            hasgit = git_branch
             break
         else
             modstring = modstring .. ':h'
@@ -103,23 +108,32 @@ M.setup = function(opts)
     local ok_color = opts.ok_color or "#10870e"
     local git_color = opts.git_color or "#7f0e87"
     local filename_color = opts.filename_color or "#2ed9e6"
+    local col_color = opts.filename_color or "#abf4f5"
+    local row_color = opts.filename_color or "#fad975"
+    local mbl = opts.mbl or 10
     vim.api.nvim_set_hl(0, "StatusLineError", { fg = error_color })
     vim.api.nvim_set_hl(0, "StatusLineWarning", { fg = warning_color })
     vim.api.nvim_set_hl(0, "StatusLineOK", { fg = ok_color })
     vim.api.nvim_set_hl(0, "StatusLineGit", { fg = git_color })
     vim.api.nvim_set_hl(0, "StatusLineFileName", { fg = filename_color })
+    vim.api.nvim_set_hl(0, "StatusLineCol", { fg = col_color })
+    vim.api.nvim_set_hl(0, "StatusLineRow", { fg = row_color })
 
+    local dirpath = ' ' .. vim.fn.expand('%:p:~:h') .. path_separator
     local statusline = {
         '%{%v:lua._statusline_component("diagnostic_status")%}',
-        '%#StatusLineGit# ⛕ %*' .. isgit() .. ' ',
+        '%#StatusLineGit# ⛕ %*' .. isgit(mbl) .. ' ',
         '[%{%v:lua.get_current_mode()%}]',
         '%=',
-        ' ' .. vim.fn.expand('%:p:~:h') .. path_separator,
-        '%#StatusLineFileName#%t%*',
+        dirpath,
+        '%#StatusLineFileName#%t%* ',
+        '%r',
+        '%m',
         '%=',
+        '%{strlen(&fenc)?&fenc:&enc} ',
         '[%{&filetype}] ',
         ' %2p%% ',
-        '%{%v:lua._statusline_component("position")%}'
+        '[ C:%#StatusLineCol#%c%* L:%#StatusLineRow#%l/%L%* ]',
     }
     vim.o.statusline = table.concat(statusline, '')
 
@@ -128,15 +142,18 @@ M.setup = function(opts)
         callback = function()
             statusline = {
                 '%{%v:lua._statusline_component("diagnostic_status")%}',
-                '%#StatusLineGit# ⛕ %*' .. isgit() .. ' ',
+                '%#StatusLineGit# ⛕ %*' .. isgit(mbl) .. ' ',
                 '[%{%v:lua.get_current_mode()%}]',
                 '%=',
-                ' ' .. vim.fn.expand('%:p:~:h') .. path_separator,
-                '%#StatusLineFileName#%t%*',
+                dirpath,
+                '%#StatusLineFileName#%t%* ',
+                '%r',
+                '%m',
                 '%=',
+                '%{strlen(&fenc)?&fenc:&enc} ',
                 '[%{&filetype}] ',
                 ' %2p%% ',
-                '%{%v:lua._statusline_component("position")%}'
+                '[ C:%#StatusLineCol#%c%* L:%#StatusLineRow#%l/%L%* ]',
             }
             vim.o.statusline = table.concat(statusline, '')
         end

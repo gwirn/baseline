@@ -132,7 +132,6 @@ M.setup = function(opts)
         '%=',
         '%{strlen(&fenc)?&fenc:&enc} ',
         '[%{&filetype}] ',
-        ' %2p%% ',
         '[ C:%#StatusLineCol#%c%* L:%#StatusLineRow#%l/%L%* ]',
     }
     vim.o.statusline = table.concat(statusline, '')
@@ -152,7 +151,6 @@ M.setup = function(opts)
                 '%=',
                 '%{strlen(&fenc)?&fenc:&enc} ',
                 '[%{&filetype}] ',
-                ' %2p%% ',
                 '[ C:%#StatusLineCol#%c%* L:%#StatusLineRow#%l/%L%* ]',
             }
             vim.o.statusline = table.concat(statusline, '')

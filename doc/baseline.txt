@@ -1,11 +1,11 @@
 ================================================================================
-                                                                       *bs_line*
+                                                                       *baseline*
 
 Basic status line without any dependencies.
 
 
-                                                                *bs_line.setup()*
-bs_line.setup({opts})
+                                                                *baseline.setup()*
+baseline.setup({opts})
     If {opts} is nil:
         Default colors will be used. >
     opts.setup()
@@ -16,7 +16,10 @@ bs_line.setup({opts})
         `warning_color` : (LSP) warning sign
         `ok_color` : LSP OK sign
         `git_color` : Git indicator symbol
-        `filename_color` : file name in path >
+        `filename_color` : file name in path
+        `col_color` : column number
+        `row_color` : line number
+        `mbl` : Max git branch length for display >
     opt.setup()
 <
     Fields show :
@@ -24,8 +27,10 @@ bs_line.setup({opts})
         * Git present and current branch
         * Current mode
         * File path
+        * Read only
+        * Modified
+        * Encoding
         * File type
-        * Percentage
         * Rows and column
 
 

@@ -1,21 +1,21 @@
-# bs_line
+# baseline
 
 *basic status line*
 
 ## Documentation
 
-see `:help bs_line`
+see `:help baseline`
 
-Replaces something like lua_line with a simpler yet informative version.
+Replaces something like lualine with a simpler yet informative version.
 
 ## Setup with LazyVim
 
 ```lua
 return {
     {
-        "gwirn/bs_line",
+        "gwirn/baseline",
         config = function()
-            require("bs_line").setup()
+            require("baseline").setup()
         end,
     }
 }
